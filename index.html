@@ -1,157 +1,167 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valentine Chaos Mode 💘</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/framer-motion/dist/framer-motion.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
 
-export default function ValentineLoveGame() {
-  const [started, setStarted] = useState(false);
-  const [level, setLevel] = useState(0);
-  const [loveMeter, setLoveMeter] = useState(0);
-  const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
-  const [finale, setFinale] = useState(false);
-  const [showSpam, setShowSpam] = useState(false);
-  const audioRef = useRef(null);
+<body class="bg-black">
+  <div id="root"></div>
 
-  const challenges = [
-    "How much do you love me? 😏",
-    "Who is the luckiest girl in the world? 💅",
-    "Who made the best Valentine surprise ever? 🔥",
-  ];
+  <!-- Romantic Song -->
+  <audio id="bgMusic" loop>
+    <source src="romantic-song.mp3" type="audio/mpeg" />
+  </audio>
 
-  useEffect(() => {
-    if (loveMeter >= 100) {
-      setTimeout(() => setFinale(true), 800);
-    }
-  }, [loveMeter]);
+  <script type="text/babel">
 
-  useEffect(() => {
-    if (finale && audioRef.current) {
-      audioRef.current.play();
-      setShowSpam(true);
-    }
-  }, [finale]);
+    const { useState, useEffect } = React;
 
-  const increaseLove = () => {
-    setLoveMeter((prev) => Math.min(prev + 34, 100));
-    setLevel((prev) => prev + 1);
-  };
+    function ValentineLoveGame() {
+      const [started, setStarted] = useState(false);
+      const [level, setLevel] = useState(0);
+      const [loveMeter, setLoveMeter] = useState(0);
+      const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
+      const [finale, setFinale] = useState(false);
+      const [showSpam, setShowSpam] = useState(false);
 
-  const moveNoButton = () => {
-    const randomX = Math.floor(Math.random() * 400) - 200;
-    const randomY = Math.floor(Math.random() * 400) - 200;
-    setNoPosition({ x: randomX, y: randomY });
-  };
+      const challenges = [
+        "How much do you love me? 😏",
+        "Who is the luckiest girl in the world? 💅",
+        "Who made the best Valentine surprise ever? 🔥",
+      ];
 
-  return (
-    <div className="relative min-h-screen overflow-hidden bg-black flex items-center justify-center text-white">
-      {/* Romantic Song (Replace with your own mp3 in public folder) */}
-      <audio ref={audioRef} loop>
-        <source src="/romantic-song.mp3" type="audio/mpeg" />
-      </audio>
+      useEffect(() => {
+        if (loveMeter >= 100) {
+          setTimeout(() => setFinale(true), 800);
+        }
+      }, [loveMeter]);
 
-      {/* Background Glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-600 via-rose-500 to-red-700 opacity-40 blur-3xl animate-pulse" />
+      useEffect(() => {
+        if (finale) {
+          const audio = document.getElementById("bgMusic");
+          audio.play();
+          setShowSpam(true);
+        }
+      }, [finale]);
 
-      {/* Floating Hearts */}
-      {[...Array(25)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-pink-400 text-xl"
-          initial={{ y: "100vh", x: Math.random() * 100 + "%" }}
-          animate={{ y: "-10vh" }}
-          transition={{ duration: 5 + Math.random() * 5, repeat: Infinity }}
-        >
-          ❤️
-        </motion.div>
-      ))}
+      const increaseLove = () => {
+        setLoveMeter(prev => Math.min(prev + 34, 100));
+        setLevel(prev => prev + 1);
+      };
 
-      <div className="relative z-10 bg-white/10 backdrop-blur-xl p-10 rounded-3xl shadow-2xl max-w-lg w-full text-center border border-pink-400/30">
-        {!started && (
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            <Heart size={70} className="mx-auto mb-6 text-pink-400" />
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-red-500 text-transparent bg-clip-text">
-              Valentine Chaos Mode 💘
-            </h1>
-            <p className="mb-6 text-lg">
-              Only the real Queen can finish this game.
-            </p>
-            <button
-              onClick={() => setStarted(true)}
-              className="px-8 py-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-full text-lg font-semibold shadow-xl hover:scale-110 transition"
+      const moveNoButton = () => {
+        const randomX = Math.floor(Math.random() * 400) - 200;
+        const randomY = Math.floor(Math.random() * 400) - 200;
+        setNoPosition({ x: randomX, y: randomY });
+      };
+
+      return (
+        <div className="relative min-h-screen overflow-hidden flex items-center justify-center text-white">
+
+          {/* Background Glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-600 via-rose-500 to-red-700 opacity-40 blur-3xl animate-pulse"></div>
+
+          {/* Floating Hearts */}
+          {[...Array(25)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-pink-400 text-xl animate-bounce"
+              style={{
+                left: Math.random() * 100 + "%",
+                bottom: Math.random() * 100 + "%"
+              }}
             >
-              Start If You Dare 😌
-            </button>
-          </motion.div>
-        )}
-
-        {started && !finale && (
-          <motion.div
-            key={level}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-2xl font-semibold mb-6">
-              {challenges[level]}
-            </h2>
-
-            <div className="w-full bg-white/20 rounded-full h-4 mb-8 overflow-hidden">
-              <motion.div
-                className="h-4 bg-gradient-to-r from-pink-400 to-red-500"
-                initial={{ width: 0 }}
-                animate={{ width: `${loveMeter}%` }}
-                transition={{ duration: 0.6 }}
-              />
+              ❤️
             </div>
+          ))}
 
-            <div className="relative flex justify-center gap-6">
-              <button
-                onClick={increaseLove}
-                className="px-6 py-3 bg-pink-500 rounded-full font-bold hover:scale-110 active:scale-95 transition"
-              >
-                Obviously Me 😎
-              </button>
+          <div className="relative z-10 bg-white/10 backdrop-blur-xl p-10 rounded-3xl shadow-2xl max-w-lg w-full text-center border border-pink-400/30">
 
-              <motion.button
-                animate={{ x: noPosition.x, y: noPosition.y }}
-                onMouseEnter={moveNoButton}
-                onClick={moveNoButton}
-                className="px-6 py-3 bg-gray-500 rounded-full font-bold absolute"
-              >
-                Not You 😜
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-
-        {finale && (
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-300 to-pink-500 text-transparent bg-clip-text">
-              YOU ARE OFFICIALLY MY FOREVER 💍❤️
-            </h2>
-            <p className="text-xl mb-6">
-              No escape. No refund. Lifetime contract activated.
-            </p>
-
-            {showSpam && (
-              <div className="space-y-2 text-pink-300 font-semibold animate-pulse">
-                <p>I love you.</p>
-                <p>I love you more.</p>
-                <p>I love you the most.</p>
-                <p>Say it back right now.</p>
+            {!started && (
+              <div>
+                <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-red-500 text-transparent bg-clip-text">
+                  Valentine Chaos Mode 💘
+                </h1>
+                <p className="mb-6 text-lg">
+                  Only the real Queen can finish this game.
+                </p>
+                <button
+                  onClick={() => setStarted(true)}
+                  className="px-8 py-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-full text-lg font-semibold shadow-xl hover:scale-110 transition"
+                >
+                  Start If You Dare 😌
+                </button>
               </div>
             )}
-          </motion.div>
-        )}
-      </div>
-    </div>
-  );
-}
+
+            {started && !finale && (
+              <div>
+                <h2 className="text-2xl font-semibold mb-6">
+                  {challenges[level]}
+                </h2>
+
+                <div className="w-full bg-white/20 rounded-full h-4 mb-8 overflow-hidden">
+                  <div
+                    className="h-4 bg-gradient-to-r from-pink-400 to-red-500 transition-all duration-500"
+                    style={{ width: loveMeter + "%" }}
+                  ></div>
+                </div>
+
+                <div className="relative flex justify-center gap-6">
+                  <button
+                    onClick={increaseLove}
+                    className="px-6 py-3 bg-pink-500 rounded-full font-bold hover:scale-110 transition"
+                  >
+                    Obviously Me 😎
+                  </button>
+
+                  <button
+                    onMouseEnter={moveNoButton}
+                    onClick={moveNoButton}
+                    style={{
+                      transform: `translate(${noPosition.x}px, ${noPosition.y}px)`
+                    }}
+                    className="px-6 py-3 bg-gray-500 rounded-full font-bold absolute"
+                  >
+                    Not You 😜
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {finale && (
+              <div>
+                <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-300 to-pink-500 text-transparent bg-clip-text">
+                  YOU ARE OFFICIALLY MY FOREVER 💍❤️
+                </h2>
+                <p className="text-xl mb-6">
+                  No escape. No refund. Lifetime contract activated.
+                </p>
+
+                {showSpam && (
+                  <div className="space-y-2 text-pink-300 font-semibold animate-pulse">
+                    <p>I love you.</p>
+                    <p>I love you more.</p>
+                    <p>I love you the most.</p>
+                    <p>Say it back right now.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<ValentineLoveGame />);
+
+  </script>
+</body>
+</html>
